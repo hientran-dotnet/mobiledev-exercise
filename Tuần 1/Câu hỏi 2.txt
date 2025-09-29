@@ -1,0 +1,4 @@
+2. Theo bạn, trong tương lai gần (10 năm) lập trình di động có phát triển không? Giải thích tại sao.
+
+- Theo em, trong tương lai gần thì lập trình di động vẫn sẽ phát triển.
+- Nguyên nhân là vì số lượng người dùng smartphone hay các thiết bị di động ngày càng tăng, nhu cầu sử dụng ứng dụng di động trong học tập, làm việc, mua sắm, giải trí ngày càng trở nên đa dạng hơn. Đồng thời các công nghệ mới của nước ta như số hóa dữ liệu hay chuyển đổi số cũng đang dần được tích hợp vào các thiết bị di động, nên cơ hội và nhu cầu lập trình di động sẽ còn mở rộng hơn nữa.
