@@ -43,6 +43,13 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        val regex = Regex("^[0-9]+$")
+
+        if (!regex.matches(nText)) {
+            Toast.makeText(this, "Dữ liệu bạn nhập không hợp lệ", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val n = nText.toInt()
         for(i in 1..n){
 
