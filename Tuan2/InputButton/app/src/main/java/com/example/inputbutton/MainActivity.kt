@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(layout.activity_main)
 
-        edtNumber = findViewById<EditText>(id.editTextText2)
+        edtNumber = findViewById<EditText>(R.id.editTextText2)
         container = findViewById<LinearLayout>(id.LinearLayout22)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(id.main)) { v, insets ->
