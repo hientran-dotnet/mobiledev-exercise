@@ -70,7 +70,7 @@ fun MainLayout(){
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             Image(
-                painter = painterResource(R.drawable.jetpackcompose),
+                painter = painterResource(R.drawable.jpc_logo),
                 contentDescription = "Jetpack Compose Logo",
                 modifier = Modifier.size(240.dp)
             )
