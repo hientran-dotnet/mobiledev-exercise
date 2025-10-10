@@ -63,7 +63,24 @@ val FontSrcRoboto_Bold = TextStyle(
 )
 
 
+// Font roboto regular
 
+
+val roboto_regular = FontFamily(
+    Font(R.font.roboto_regular)
+)
+
+val SrcRobotoRegular = FontFamily(
+    Font(R.font.roboto_bold)
+)
+
+val FontRoboto_regular = TextStyle(
+    fontFamily = roboto_regular
+)
+
+val FontSrcRoboto_regular = TextStyle(
+    fontFamily = SrcRobotoRegular
+)
 
 // Set of Material typography styles to start with
 val Typography = Typography(

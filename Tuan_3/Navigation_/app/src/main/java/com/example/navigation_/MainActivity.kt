@@ -7,6 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,15 +22,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
@@ -47,10 +53,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.room.util.copy
 import com.example.navigation_.ui.theme.FontRoboto_Bold
+import com.example.navigation_.ui.theme.FontRoboto_regular
 import com.example.navigation_.ui.theme.FrontPoppins
 import com.example.navigation_.ui.theme.FrontPoppinsBold
 import com.example.navigation_.ui.theme.Navigation_Theme
+import com.example.navigation_.ui.theme.Roboto_Bold
 
 
 class MainActivity : ComponentActivity() {
@@ -99,7 +108,7 @@ fun MainLayout(navController: NavController) {
                 .fillMaxSize()
 //                .padding(104.dp),
                 .padding(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = CenterHorizontally
         ){
             Spacer(modifier = Modifier.height(102.dp))
             // ảnh
@@ -168,6 +177,13 @@ fun MainLayout(navController: NavController) {
     }
 }
 
+
+@Composable
+fun MainLayoutPreview() {
+    val navController = rememberNavController()
+    MainLayout(navController = navController)
+}
+
 @Preview(
     showBackground = true,
     showSystemUi = true,
@@ -175,8 +191,379 @@ fun MainLayout(navController: NavController) {
     name = "Pixel 6 Pro"
 )
 @Composable
-fun MainLayoutPreview() {
-    // Tạo một NavController giả cho Preview
-    val navController = rememberNavController()
-    MainLayout(navController = navController)
+fun UiComponentScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .navigationBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Tiêu đề chính
+            Text(
+                text = "UI Component List",
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = FrontPoppinsBold,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 24.sp,
+                color = Color(0xFF2196F3)
+            )
+
+            // Cách dòng tiêu đề tiêu đề phụ
+//            Spacer(modifier = Modifier.height(22.dp))
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.TopCenter
+            ){
+                Column(
+                    // Tiêu đề phụ
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ){
+                    Text(
+                        text = "Display",
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        style = FontRoboto_Bold,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
+                    )
+                    // Cách dòng giữa tiêu đề phụ và nội dung
+//                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(71.dp)
+                            .background(
+                                Color(0x4D2196F3),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    ){
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalAlignment = CenterHorizontally
+                        ){
+                            // Tiêu đề phụ
+                            Text(
+                                text = "Text",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+//                                    .padding(16.dp),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_Bold,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                            )
+
+                            // Nội dung
+                            Text(
+                                text = "Displays text",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_regular,
+//                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+
+//                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(71.dp)
+                            .background(
+                                Color(0x4D2196F3),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    ){
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalAlignment = CenterHorizontally
+                        ){
+                            // Tiêu đề phụ
+                            Text(
+                                text = "Image",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+//                                    .padding(16.dp),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_Bold,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                            )
+
+                            // Nội dung
+                            Text(
+                                text = "Displays an image",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_regular,
+//                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+
+//                    Spacer(modifier = Modifier.height(27.dp))
+
+                    Text(
+                        text = "Input",
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        style = FontRoboto_Bold,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
+                    )
+
+//                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(71.dp)
+                            .background(
+                                Color(0x4D2196F3),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    ){
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalAlignment = CenterHorizontally
+                        ){
+                            // Tiêu đề phụ
+                            Text(
+                                text = "TextField",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+//                                    .padding(16.dp),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_Bold,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                            )
+
+                            // Nội dung
+                            Text(
+                                text = "Input field for text",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_regular,
+//                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+
+//                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(71.dp)
+                            .background(
+                                Color(0x4D2196F3),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    ){
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalAlignment = CenterHorizontally
+                        ){
+                            // Tiêu đề phụ
+                            Text(
+                                text = "PasswordField",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+//                                    .padding(16.dp),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_Bold,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                            )
+
+                            // Nội dung
+                            Text(
+                                text = "Input field for password",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_regular,
+//                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+
+                    // Layout
+//                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Text(
+                        text = "Layout",
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        style = FontRoboto_Bold,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
+                    )
+
+//                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(71.dp)
+                            .background(
+                                Color(0x4D2196F3),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    ){
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalAlignment = CenterHorizontally
+                        ){
+                            // Tiêu đề phụ
+                            Text(
+                                text = "Column",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+//                                    .padding(16.dp),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_Bold,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                            )
+
+                            // Nội dung
+                            Text(
+                                text = "Arranges element vertically",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_regular,
+//                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+
+//                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(71.dp)
+                            .background(
+                                Color(0x4D2196F3),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    ){
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalAlignment = CenterHorizontally
+                        ){
+                            // Tiêu đề phụ
+                            Text(
+                                text = "Row",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+//                                    .padding(16.dp),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_Bold,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                            )
+
+                            // Nội dung
+                            Text(
+                                text = "Arranges elements horizontally",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_regular,
+//                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+
+//                  Spacer(modifier = Modifier.weight(1f))
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(71.dp)
+                            .background(
+                                Color(0x4DE80400),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                    ){
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalAlignment = CenterHorizontally
+                        ){
+                            // Tiêu đề phụ
+                            Text(
+                                text = "Tự tìm hiểu",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+//                                    .padding(16.dp),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_Bold,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                            )
+
+                            // Nội dung
+                            Text(
+                                text = "Tìm ra tất cả các thành phần UI Cơ bản",
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Start,
+                                style = FontRoboto_regular,
+//                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
 }
