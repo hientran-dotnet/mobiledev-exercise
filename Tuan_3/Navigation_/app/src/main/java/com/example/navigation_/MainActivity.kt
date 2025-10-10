@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +40,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -54,6 +56,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.room.util.copy
+import com.example.navigation_.Screen.MainLayout.route
 import com.example.navigation_.ui.theme.FontRoboto_Bold
 import com.example.navigation_.ui.theme.FontRoboto_regular
 import com.example.navigation_.ui.theme.FrontPoppins
@@ -80,7 +83,10 @@ class MainActivity : ComponentActivity() {
                             MainLayout(navController = navController)
                         }
                         composable(route = Screen.UiComponent.route){
-                            UiComponentScreen()
+                            UiComponentScreen(navController = navController)
+                        }
+                        composable (route = Screen.TextDetailScreen.route){
+                            TextDetailScreen()
                         }
                     }
                 }
@@ -184,14 +190,9 @@ fun MainLayoutPreview() {
     MainLayout(navController = navController)
 }
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true,
-    device = "id:pixel_6_pro",
-    name = "Pixel 6 Pro"
-)
+
 @Composable
-fun UiComponentScreen() {
+fun UiComponentScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -252,11 +253,14 @@ fun UiComponentScreen() {
                                 Color(0x4D2196F3),
                                 shape = RoundedCornerShape(10.dp)
                             )
+                            .clickable{
+                                navController.navigate(Screen.TextDetailScreen.route)
+                            }
                     ){
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                            .padding(horizontal = 16.dp, vertical = 10.dp),
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
                             horizontalAlignment = CenterHorizontally
                         ){
                             // Tiêu đề phụ
@@ -563,7 +567,21 @@ fun UiComponentScreen() {
                 }
             }
         }
+    }
+}
 
-
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    device = "id:pixel_6_pro",
+    name = "Pixel 6 Pro"
+)
+@Composable
+fun TextDetailScreen(){
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text("Đây là trang chi tiết!")
     }
 }
