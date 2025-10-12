@@ -1,31 +1,27 @@
 package com.example.navigation_
 
 import android.annotation.SuppressLint
-import android.graphics.Paint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.VectorConverter
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,54 +29,49 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusModifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import androidx.room.util.copy
-import androidx.window.core.layout.WindowWidthSizeClass
+import androidx.room.util.TableInfo
 import coil.compose.AsyncImage
 import com.example.navigation_.Screen.MainLayout.route
 import com.example.navigation_.ui.theme.FontRoboto_Bold
 import com.example.navigation_.ui.theme.FontRoboto_regular
-import com.example.navigation_.ui.theme.FontSourceCodePro
 import com.example.navigation_.ui.theme.FrontPoppins
 import com.example.navigation_.ui.theme.FrontPoppinsBold
 import com.example.navigation_.ui.theme.Navigation_Theme
-import com.example.navigation_.ui.theme.Roboto_Bold
 
 
 class MainActivity : ComponentActivity() {
@@ -95,7 +86,7 @@ class MainActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.MainLayout.route
+                        startDestination = route
                     ){
                         composable(route = Screen.MainLayout.route){
                             MainLayout(navController = navController)
@@ -110,16 +101,16 @@ class MainActivity : ComponentActivity() {
                             ImageScreen(navController = navController)
                         }
                         composable(route = Screen.TextFieldScreen.route){
-                            TextFieldScreen()
+                            TextFieldScreen(navController = navController)
                         }
                         composable(route = Screen.PasswordFieldScreen.route){
-                            PasswordFieldScreen()
+                            PasswordFieldScreen(navController = navController)
                         }
                         composable(route = Screen.ColumnScreen.route){
-                            ColumnScreen()
+                            ColumnScreen(navController = navController)
                         }
                         composable(route = Screen.RowScreen.route){
-                            RowScreen()
+                            RowScreen(navController = navController)
                         }
                     }
                 }
@@ -232,7 +223,7 @@ fun UiComponentScreen(navController: NavController) {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .navigationBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = CenterHorizontally
         ) {
             // Tiêu đề chính
             Text(
@@ -817,10 +808,10 @@ fun ImageScreen(navController: NavController) {
                 )
 
                 Text(
-                    text = "Images Component",
+                    text = "Images",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 70.dp)
+                        .padding(start = 110.dp)
                     ,
                     textAlign = TextAlign.Start,
                     style = FrontPoppinsBold,
@@ -876,29 +867,234 @@ fun ImageScreen(navController: NavController) {
     }
 }
 
-
 @Composable
-fun TextFieldScreen(){
+fun TextFieldScreen(navController: NavController){
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+        ,
+        contentAlignment = Alignment.Center,
+
     ) {
-        Text("Đây là trang input text component")
+
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ){
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+
+                // Nút quay lại
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
+                    contentDescription = null,
+                    tint = Color(0xFF2196F3),
+                    modifier = Modifier
+                        .padding(start = 24.dp)
+                        .clickable(
+                            onClick = {
+                                navController.popBackStack()
+                            }
+                        )
+                )
+
+                Text(
+                    text = "TextField",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 110.dp)
+                    ,
+                    textAlign = TextAlign.Start,
+                    style = FrontPoppinsBold,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                    color = Color(0xFF2196F3)
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                ,
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = CenterHorizontally,
+            ){
+                var textState by remember { mutableStateOf("") }
+
+                TextField(
+                    value = textState,
+                    onValueChange = {
+                        textState = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    label = { Text("Thông tin nhập") }
+                )
+
+                if(!textState.isEmpty()){
+                    Text(
+                        text = textState,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Normal,
+                        color = Color.Red
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun PasswordFieldScreen(){
+fun PasswordFieldScreen(navController: NavController) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Đây là trang input password component!")
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
+        contentAlignment = Alignment.Center,
+
+        ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                // Nút quay lại
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
+                    contentDescription = null,
+                    tint = Color(0xFF2196F3),
+                    modifier = Modifier
+                        .padding(start = 24.dp)
+                        .clickable(
+                            onClick = {
+                                navController.popBackStack()
+                            }
+                        )
+                )
+
+                Text(
+                    text = "Password Field",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 70.dp),
+                    textAlign = TextAlign.Start,
+                    style = FrontPoppinsBold,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                    color = Color(0xFF2196F3)
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                ,
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = CenterHorizontally,
+            ){
+                val passwordFieldValue = remember { mutableStateOf("") }
+                val passwordVisible = remember { mutableStateOf(false) }
+
+                TextField(
+                    value = passwordFieldValue.value,
+                    onValueChange = {
+                        passwordFieldValue.value = it
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
+                        .clip(shape = RoundedCornerShape(16.dp))
+                    ,
+                    visualTransformation = if (passwordVisible.value)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation(),
+
+                    trailingIcon = {
+                        val image = if (passwordVisible.value)
+                            Icon(
+                                painter = painterResource(R.drawable.visibility_24dp_e3e3e3),
+                                contentDescription = "Mở mắt nè"
+                            )
+                        else
+                            Icon(
+                                painter = painterResource(R.drawable.visibility_off_24dp_e3e3e3),
+                                contentDescription = "Mở mắt nè"
+                            )
+
+                        IconButton(onClick = {
+                            passwordVisible.value = !passwordVisible.value
+                        }) {
+                            Icon(
+                                painter = painterResource(R.drawable.visibility_24dp_e3e3e3),
+                                contentDescription = if (passwordVisible.value)
+                                    "Ẩn mật khẩu" else "Hiện mật khẩu",
+                                tint = Color.Gray
+                            )
+                        }
+                    },
+                    label = { Text("Mật khẩu") },
+                    singleLine = true
+                )
+
+                if(!passwordFieldValue.value.isEmpty()){
+                    // độ dài phải lớn hơn 6
+                    if(passwordFieldValue.value.length > 6){
+
+                        // không được chứa khoảng trắng
+                        if(!passwordFieldValue.value.contains(" ")){
+                            Text(
+                                text = "Mật khẩu hợp lệ",
+                                color = Color(0xFFE53935),
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                        else{
+                            Text(
+                                text = "Mật khẩu không được chứa ký tự khoảng trắng",
+                                color = Color(0xFFE53935),
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }else{
+                        Text(
+                            text = "Độ dài mật khẩu tối thiểu là 6 ký tự",
+                            color = Color(0xFFD32F2F),
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }else{
+                    Text(
+                        text = "Trường mật khẩu đang trống hehe",
+                        color = Color(0xFF9E9E9E),
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+            }
+        }
     }
 }
 
 @Composable
-fun ColumnScreen(){
+fun ColumnScreen(navController: NavController) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -908,27 +1104,221 @@ fun ColumnScreen(){
 }
 
 @Composable
-fun RowScreen(){
+fun RowScreen(navController: NavController) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Đây là trang row layout!")
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
+        contentAlignment = Alignment.Center,
+
+        ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                // Nút quay lại
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
+                    contentDescription = null,
+                    tint = Color(0xFF2196F3),
+                    modifier = Modifier
+                        .padding(start = 24.dp)
+                        .clickable(
+                            onClick = {
+                                navController.popBackStack()
+                            }
+                        )
+                )
+
+                Text(
+                    text = "Row Layout",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 90.dp),
+                    textAlign = TextAlign.Start,
+                    style = FrontPoppinsBold,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                    color = Color(0xFF2196F3)
+                )
+            }
+
+            Column (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp)
+            ){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .background(
+                            color = Color(0xFFE1E1E1),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(10.dp)
+                    ,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ){
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFFA1BEF2),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFF5287EE),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFFA1BEF2),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                        .height(100.dp)
+                        .background(
+                            color = Color(0xFFE1E1E1),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(10.dp)
+                    ,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ){
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFFA1BEF2),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFF5287EE),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFFA1BEF2),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                        .height(100.dp)
+                        .background(
+                            color = Color(0xFFE1E1E1),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(10.dp)
+                    ,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ){
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFFA1BEF2),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFF5287EE),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFFA1BEF2),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                        .height(100.dp)
+                        .background(
+                            color = Color(0xFFE1E1E1),
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .padding(10.dp)
+                    ,
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ){
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFFA1BEF2),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFF5287EE),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(80.dp)
+                            .background(
+                                color = Color(0xFFA1BEF2),
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                    )
+                }
+            }
+        }
     }
 }
 
-//@Composable
-//fun responsivePadding(
-//    compact: Dp = 16.dp,
-//    medium: Dp = 24.dp,
-//    expanded: Dp = 32.dp
-//): Dp {
-//    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-//
-//    return when (windowSizeClass.windowWidthSizeClass) {
-//        WindowWidthSizeClass.COMPACT -> compact
-//        WindowWidthSizeClass.MEDIUM -> medium
-//        WindowWidthSizeClass.EXPANDED -> expanded
-//        else -> medium
-//    }
-//}
+@Composable
+fun passwordCheck(string: String){
+
+}
