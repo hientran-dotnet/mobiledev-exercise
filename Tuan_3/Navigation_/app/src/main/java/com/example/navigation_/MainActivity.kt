@@ -23,11 +23,13 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -272,7 +274,7 @@ fun UiComponentScreen(navController: NavController) {
                                 Color(0x4D2196F3),
                                 shape = RoundedCornerShape(10.dp)
                             )
-                            .clickable{
+                            .clickable {
                                 navController.navigate(Screen.TextDetailScreen.route)
                             }
                     ){
@@ -317,7 +319,7 @@ fun UiComponentScreen(navController: NavController) {
                                 Color(0x4D2196F3),
                                 shape = RoundedCornerShape(10.dp)
                             )
-                            .clickable{
+                            .clickable {
                                 navController.navigate(Screen.ImageScreen.route)
                             }
                     ){
@@ -371,7 +373,7 @@ fun UiComponentScreen(navController: NavController) {
                                 Color(0x4D2196F3),
                                 shape = RoundedCornerShape(10.dp)
                             )
-                            .clickable{
+                            .clickable {
                                 navController.navigate(Screen.TextFieldScreen.route)
                             }
                     ){
@@ -416,7 +418,7 @@ fun UiComponentScreen(navController: NavController) {
                                 Color(0x4D2196F3),
                                 shape = RoundedCornerShape(10.dp)
                             )
-                            .clickable{
+                            .clickable {
                                 navController.navigate(Screen.PasswordFieldScreen.route)
                             }
                     ){
@@ -474,7 +476,7 @@ fun UiComponentScreen(navController: NavController) {
                                 Color(0x4D2196F3),
                                 shape = RoundedCornerShape(10.dp)
                             )
-                            .clickable{
+                            .clickable {
                                 navController.navigate(Screen.ColumnScreen.route)
                             }
                     ){
@@ -519,7 +521,7 @@ fun UiComponentScreen(navController: NavController) {
                                 Color(0x4D2196F3),
                                 shape = RoundedCornerShape(10.dp)
                             )
-                            .clickable{
+                            .clickable {
                                 navController.navigate(Screen.RowScreen.route)
                             }
                     ){
@@ -564,7 +566,7 @@ fun UiComponentScreen(navController: NavController) {
                                 Color(0x4DE80400),
                                 shape = RoundedCornerShape(10.dp)
                             )
-                            .clickable{
+                            .clickable {
 
                             }
                     ){
@@ -1094,16 +1096,6 @@ fun PasswordFieldScreen(navController: NavController) {
 }
 
 @Composable
-fun ColumnScreen(navController: NavController) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text("Đây là trang column layout!")
-    }
-}
-
-@Composable
 fun RowScreen(navController: NavController) {
     Box(
         modifier = Modifier
@@ -1319,6 +1311,95 @@ fun RowScreen(navController: NavController) {
 }
 
 @Composable
-fun passwordCheck(string: String){
+fun ColumnScreen(navController: NavController) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
+        contentAlignment = Alignment.Center,
 
+        ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                // Nút quay lại
+                Icon(
+                    painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
+                    contentDescription = null,
+                    tint = Color(0xFF2196F3),
+                    modifier = Modifier
+                        .padding(start = 24.dp)
+                        .clickable(
+                            onClick = {
+                                navController.popBackStack()
+                            }
+                        )
+                )
+
+                Text(
+                    text = "Column Layout",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 75.dp),
+                    textAlign = TextAlign.Start,
+                    style = FrontPoppinsBold,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 20.sp,
+                    color = Color(0xFF2196F3)
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .height(470.dp)
+                    .fillMaxSize()
+                    .padding(24.dp)
+                    .background(
+                        color = Color(0xFFE3E3E3),
+                        shape = RoundedCornerShape(16.dp)
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(290.dp)
+                        .height(130.dp)
+                        .padding(top = 24.dp)
+                        .background(
+                            color = Color(0xFFB2E4BF),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                )
+                Box(
+                    modifier = Modifier
+                        .width(290.dp)
+                        .height(130.dp)
+                        .padding(top = 24.dp)
+                        .background(
+                            color = Color(0xFF70D689),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                )
+                Box(
+                    modifier = Modifier
+                        .width(290.dp)
+                        .height(130.dp)
+                        .padding(top = 24.dp)
+                        .background(
+                            color = Color(0xFFB2E4BF),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                )
+            }
+        }
+    }
 }
