@@ -13,4 +13,8 @@ class Student (
         )
         return info
     }
+
+    fun getEmail(): String {
+        return email
+    }
 }

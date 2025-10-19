@@ -1,6 +1,8 @@
 package com.example.quanlythuvien.pages
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -33,9 +36,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.quanlythuvien.viewmodels.StudentViewModel
 
 @Composable
-fun StudentPage(navController: NavController, modifier: Modifier = Modifier) {
+fun StudentPage(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    studentViewModel: StudentViewModel
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -137,6 +145,7 @@ fun StudentPage(navController: NavController, modifier: Modifier = Modifier) {
                         shape = RoundedCornerShape(16.dp),
                         color = Color(0xffd8d8d8)
                     )
+                    .horizontalScroll(rememberScrollState())
                 ,
             ){
                 // LazyColumn
@@ -147,8 +156,16 @@ fun StudentPage(navController: NavController, modifier: Modifier = Modifier) {
                     ,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
-                    items(20) { index ->
-                        Text(text = "Item: $index")
+                    items(studentViewModel.student) { student ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            Text(student.id)
+                            Text(student.name)
+                            Text(student.getEmail())
+                        }
                     }
                 }
             }

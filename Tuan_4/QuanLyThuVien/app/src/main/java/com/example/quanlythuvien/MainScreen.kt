@@ -12,10 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -24,6 +21,7 @@ import com.example.quanlythuvien.pages.AddStudentPage
 import com.example.quanlythuvien.pages.BookPage
 import com.example.quanlythuvien.pages.HomePage
 import com.example.quanlythuvien.pages.StudentPage
+import com.example.quanlythuvien.viewmodels.StudentViewModel
 
 
 @Composable
@@ -41,6 +39,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
     // Danh sách các route hiển thị bottom bar
     val routesWithBottomBar = listOf("home", "books", "students")
     val showBottomBar = currentRoute in routesWithBottomBar
+
+    val studentViewModel : StudentViewModel = viewModel()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -83,8 +83,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
         ) {
             composable("home") { HomePage(modifier = modifier) }
             composable("books") { BookPage(modifier = modifier) }
-            composable("students") { StudentPage(navController = navController, modifier = modifier) }
-            composable("addStudent") { AddStudentPage(navController = navController, modifier = modifier) }
+            composable("students") { StudentPage(navController = navController, modifier = modifier, studentViewModel = studentViewModel) }
+            composable("addStudent") { AddStudentPage(navController = navController, modifier = modifier, studentViewModel = studentViewModel) }
         }
     }
 }
