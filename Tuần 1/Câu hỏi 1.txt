@@ -1,4 +1,0 @@
-1. Mong muốn và định hướng của bạn là gì sau khi học xong môn học?
-
-- Sau khi hoàn thành môn học, em mong muốn nắm vững kiến thức của từng bước phát triển một ứng dụng di động từ ý tưởng cho đến bước triển khai ứng dụng. Nắm vững cách mà một ứng dụng di động hoạt động như thế nào. 
-- Định hướng của em sau khi hoàn thành môn học này đó là nâng cấp thêm kĩ năng của bản thân trong lĩnh vực phát triển ứng dụng, có thêm cho mình một công nghệ mới để có thể dễ dàng cạnh tranh, tìm kiếm cơ hội thực tập và làm việc liên quan đến chuyên ngành phát triển ứng dụng.

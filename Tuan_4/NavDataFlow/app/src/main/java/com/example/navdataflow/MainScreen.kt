@@ -69,10 +69,13 @@ fun MainScreen(
                 fontSize = 14.sp
             )
 
-            var email by remember { mutableStateOf("") }
+            val regex = remember { Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$") }
+
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = forgotPasswordViewModel._email,
+                onValueChange = {
+                    forgotPasswordViewModel.setEmail(it)
+                },
                 label = { Text("Your Email") },
                 leadingIcon = {
                     Icon(
@@ -84,19 +87,33 @@ fun MainScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            if(!email.isEmpty()){
-                Button(
-                    onClick = {
-
-                    },
-                    enabled = true,
-                    colors = ButtonDefaults.buttonColors(Color(0XFF2196F3)),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Text("Next")
+            var isValid: Boolean
+            if(!forgotPasswordViewModel._email.isEmpty()) {
+                if (regex.matches(forgotPasswordViewModel._email)) {
+                    isValid = true
+                    Button(
+                        onClick = {
+                            navController.navigate("verify_code")
+                        },
+                        enabled = true,
+                        colors = ButtonDefaults.buttonColors(Color(0XFF2196F3)),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        Text("Next")
+                    }
+                } else {
+                    Text(
+                        text = "Please enter a valid email address",
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .fillMaxWidth(1f)
+                    )
                 }
             }else{
+                isValid = false
                 Button(
                     onClick = {
 
@@ -109,8 +126,6 @@ fun MainScreen(
                     Text("Next")
                 }
             }
-
-
         }
     }
 }

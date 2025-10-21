@@ -1,5 +1,6 @@
 package com.example.navdataflow
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,12 +22,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 
 @Composable
@@ -35,6 +38,7 @@ fun VerifyCode(
     forgotPasswordViewModel: ForgotPasswordViewModel,
     navController: NavHostController
 ) {
+    val context = LocalContext.current
     Image(
         painter = painterResource(R.drawable.arrowback_icon),
         contentDescription = "back button",
@@ -72,7 +76,7 @@ fun VerifyCode(
             fontFamily = FontFamily(Font(R.font.inter_regular))
         )
         Text(
-            "Enter the the code \n" +
+            "Enter the the code 887624\n" +
                     "we just sent you on your registered Email",
             textAlign = TextAlign.Center,
             color = Color.Gray,
@@ -89,19 +93,40 @@ fun VerifyCode(
             mask = true,
         )
 
-        Button(
-            onClick = {
-                forgotPasswordViewModel.setVerifyCode(otpValue.value)
-                navController.navigate("create_new_password")
-            },
-            colors = ButtonDefaults.buttonColors(Color(0XFF2196F3)),
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = "Next",
-                fontFamily = FontFamily(Font(R.font.inter_regular))
-            )
+        if(otpValue.value.length == 6){
+            Button(
+                onClick = {
+                    if(otpValue.value == "887624"){
+                        forgotPasswordViewModel.setVerifyCode(otpValue.value)
+                        navController.navigate("create_new_password")
+                    }else{
+                        Toast.makeText(context,"Invalid code", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(Color(0XFF2196F3)),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Next",
+                    fontFamily = FontFamily(Font(R.font.inter_regular))
+                )
+            }
+        }else{
+            Button(
+                onClick = {
+
+                },
+                enabled = false,
+                colors = ButtonDefaults.buttonColors(Color(0XFF2196F3)),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = "Next",
+                    fontFamily = FontFamily(Font(R.font.inter_regular))
+                )
+            }
         }
     }
 }
